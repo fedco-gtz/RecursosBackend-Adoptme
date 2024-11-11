@@ -6,34 +6,49 @@ import UserDTO from '../dto/User.dto.js';
 const register = async (req, res) => {
     try {
         const { first_name, last_name, email, password } = req.body;
-        if (!first_name || !last_name || !email || !password) return res.status(400).send({ status: "error", error: "Incomplete values" });
+
+        if (!first_name || !last_name || !email || !password) {
+            return res.status(400).send({ status: "error", error: "Valores incompletos" });
+        }
+
         const exists = await usersService.getUserByEmail(email);
-        if (exists) return res.status(400).send({ status: "error", error: "User already exists" });
+        if (exists) {
+            return res.status(400).send({ status: "error", error: "El usuario ya existe" });
+        }
+
         const hashedPassword = await createHash(password);
+
         const user = {
             first_name,
             last_name,
             email,
-            password: hashedPassword
-        }
+            password: hashedPassword,
+            role: 'user'
+        };
+
         let result = await usersService.create(user);
         console.log(result);
-        res.send({ status: "success", payload: result._id });
-    } catch (error) {
 
+        const userDto = UserDTO.getUserTokenFrom(result);
+        const token = jwt.sign(userDto, 'tokenSecretJWT', { expiresIn: '1h' });
+
+        res.cookie('coderCookie', token, { maxAge: 3600000 }).redirect('/');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ status: "error", error: "Error al registrar el usuario" });
     }
-}
+};
 
 const login = async (req, res) => {
     const { email, password } = req.body;
-    if (!email || !password) return res.status(400).send({ status: "error", error: "Incomplete values" });
+    if (!email || !password) return res.status(400).send({ status: "error", error: "Valores incompletos" });
     const user = await usersService.getUserByEmail(email);
-    if(!user) return res.status(404).send({status:"error",error:"User doesn't exist"});
+    if(!user) return res.status(404).send({status:"error",error:"El usuario no existe"});
     const isValidPassword = await passwordValidation(user,password);
-    if(!isValidPassword) return res.status(400).send({status:"error",error:"Incorrect password"});
+    if(!isValidPassword) return res.status(400).send({status:"error",error:"Contraseña incorrecta"});
     const userDto = UserDTO.getUserTokenFrom(user);
     const token = jwt.sign(userDto,'tokenSecretJWT',{expiresIn:"1h"});
-    res.cookie('coderCookie',token,{maxAge:3600000}).send({status:"success",message:"Logged in"})
+    res.cookie('coderCookie',token,{maxAge:3600000}).send({status:"success",message:"Sesión iniciada"})
 }
 
 const current = async(req,res) =>{

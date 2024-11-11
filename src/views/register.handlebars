@@ -1,0 +1,117 @@
+<body class="bodyRegistrarse">
+    <header class="headerRegistrarse">
+        <a class="anclaLogo" href="/">
+            <span>INICIO</span>
+        </a>
+    </header>
+    <main class="seccionRegistrarse">
+        <form action="/api/sessions/register" method="POST">
+            <h2 class="tituloRegistrarse">Registro</h2>
+            <div>
+                <input type="text" placeholder="Nombre" id="nombre" name="first_name" required>
+            </div>
+            <div>
+                <input type="text" placeholder="Apellido" id="apellido" name="last_name" required>
+            </div>
+            <div>
+                <input type="text" placeholder="E-mail" id="email" name="email" required>
+            </div>
+            <div>
+                <input type="password" placeholder="Contraseña" id="password" name="password" required>
+            </div>
+            <div>
+                <input class="boton" type="submit" value="Registrarse">
+            </div>
+        </form>
+    </main>
+</body>
+
+<style>
+    * {
+        font-family: 'League Spartan', sans-serif;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    .bodyRegistrarse {
+        height: 100vh;
+        background: linear-gradient(to right top, #24242473, #24242473), url(../../images/pages/frontPage.png);
+        background-size: cover;
+        background-position: center;
+    }
+
+    .headerRegistrarse {
+        color: #ffffff;
+        background: rgb(35, 36, 36);
+        padding: 10px;
+        display: flex;
+        align-items: center;
+        height: 50px;
+    }
+
+    .anclaLogo {
+        text-decoration: none;
+        color: #ffffff;
+        font-weight: 700;
+        margin-left: 30px;
+    }
+
+    .anclaLogo:hover {
+        text-decoration: none;
+        color: #FFB84D;
+        border-bottom-style: solid;
+        border-bottom-color: #FFDE59;
+    }
+
+    .seccionRegistrarse {
+        background-color: rgb(36, 36, 36);
+        width: 30%;
+        margin: 10px auto;
+        border-radius: 5px;
+        padding: 40px 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 90vh;
+        font-size: 1.2rem;
+    }
+
+    .tituloRegistrarse {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+        color: #ffffff;
+    }
+
+    form {
+        width: 100%;
+        padding: 40px;
+    }
+
+    input {
+        width: 100%;
+        margin-bottom: 20px;
+        height: 40px;
+        padding: 0px 20px;
+        font-size: 1.2rem;
+        border-radius: 20px;
+        border: 2px solid #FFB84D;
+        background-color: #333333;
+        outline: none;
+        color: rgb(255, 255, 255);
+    }
+
+    .boton {
+        width: 87%;
+        box-sizing: content-box;
+        background-color: #FFB84D;
+        border: 2px solid #FFB84D;
+        color: #333333;
+        padding: 1rem 1rem;
+        border-radius: 5px;
+        font-size: 1.5rem;
+        font-weight: 700;
+    }
+</style>
