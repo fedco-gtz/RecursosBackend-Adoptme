@@ -1,0 +1,165 @@
+paths:
+  /api/mocks/mockingpets:
+    get:
+      summary: Generar mascotas 
+      tags:
+        - Mocks
+      parameters:
+        - name: num
+          in: query
+          schema:
+            type: integer
+            default: 50
+            minimum: 1
+          description: Número de mascotas que se van a generar
+      responses:
+        '200':
+          description: Mascotas generadas correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pet'
+        '400':
+          description: Valor inválido de mascotas
+        '500':
+          description: Error interno del servidor
+
+  /api/mocks/mockingusers:
+    get:
+      summary: Generar usuarios 
+      tags:
+        - Mocks
+      parameters:
+        - name: num
+          in: query
+          schema:
+            type: integer
+            default: 50
+            minimum: 1
+          description: Número de usuarios que se van a generar
+      responses:
+        '200':
+          description: Usuarios generados correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '400':
+          description: Valor inválido de usuarios
+        '500':
+          description: Error interno del servidor
+
+  /api/mocks/generateDate/{users}/{pets}:
+    post:
+      summary: Generar datos de usuarios y mascotas
+      tags:
+        - Mocks
+      parameters:
+        - name: users
+          in: path
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: Número de usuarios que se van a generar
+        - name: pets
+          in: path
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: Número de mascotas que se van a generar
+      responses:
+        '200':
+          description: Datos generados correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
+                  payload:
+                    type: object
+                    properties:
+                      users:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/User'
+                      pets:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Pet'
+        '400':
+          description: Valor inválido de usuarios o mascotas
+        '500':
+          description: Error interno del servidor
+
+components:
+  schemas:
+    Pet:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Nombre de la mascota
+        specie:
+          type: string
+          description: Especie de la mascota
+          enum:
+            - dog
+            - cat
+            - rabbit
+            - bird
+        adopted:
+          type: boolean
+          description: Indica si la mascota ya fue adoptada
+          default: false
+        owner:
+          type: string
+          nullable: true
+          description: ID del dueño de la mascota
+      example:
+        name: "Pupa"
+        specie: "dog"
+        adopted: false
+        owner: null
+
+    User:
+      type: object
+      properties:
+        first_name:
+          type: string
+          description: Nombre del usuario
+        last_name:
+          type: string
+          description: Apellido del usuario
+        email:
+          type: string
+          description: Correo electrónico del usuario
+        password:
+          type: string
+          description: Contraseña cifrada del usuario
+        role:
+          type: string
+          description: Rol del usuario
+          enum:
+            - user
+            - admin
+        pets:
+          type: array
+          items:
+            type: string
+            description: ID de las mascotas adoptadas por el usuario
+      example:
+        first_name: "Pablo"
+        last_name: "Juarez"
+        email: "pjuarez@example.com"
+        password: "1234$..."
+        role: "user"
+        pets: []
